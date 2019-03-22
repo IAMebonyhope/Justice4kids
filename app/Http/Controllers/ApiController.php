@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Validator;
  
 class ApiController extends Controller
 {
@@ -14,9 +15,12 @@ class ApiController extends Controller
  
     public function register(Request $request)
     {
+        
         $user =  User::where([
             ['email', '=', $request->email],
         ])->first();
+
+        //dd($user);
 
         if($user != null){
             $roles = unserialize($user->role);
@@ -26,35 +30,50 @@ class ApiController extends Controller
             $user->save();
         }
         else{
-            $this->newRegisteration($request);
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|string|min:6|max:10|confirmed',
+                'role' => 'required|string',
+                'phoneNumber' => 'string',
+                'address' => 'json',
+                'about' => 'string',
+                'additionalFields' => 'string',
+                'credentials' => 'file|array',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'data' => $validator->errors()
+                ], 200);
+            }
+
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = bcrypt($request->password);
+            $user->role = $request->role;
+            $user->email = $request->email;
+            $user->phoneNumber = $request->phoneNumber;
+            $user->address = serialize($request->address);
+            $user->about = $request->about;
+            $user->additionalUrls = $request->additionalFields;
+
+            $user->save();
+    
+            if ($this->loginAfterSignUp) {
+                return $this->login($request);
+            }
+    
+            return response()->json([
+                'success' => true,
+                'data' => $user
+            ], 200);
         }
 
     }
 
-    public function newRegisteration(RegisterAuthRequest $request)
-    {
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->role = $request->role;
-        $user->email = $request->email;
-        $user->phoneNumber = $request->phoneNumber;
-        $user->address = serialize($request->address);
-        $user->about = $request->email;
-        $user->additionalUrls = $request->additionalFields;
-
-        $user->save();
- 
-        if ($this->loginAfterSignUp) {
-            return $this->login($request);
-        }
- 
-        return response()->json([
-            'success' => true,
-            'data' => $user
-        ], 200);
-    }
  
     public function login(Request $request)
     {

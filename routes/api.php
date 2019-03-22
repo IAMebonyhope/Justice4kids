@@ -19,7 +19,6 @@ Route::post('reports/create', 'ApiController@createReport');
 //advocates, translators, reporters 
 Route::post('login', 'ApiController@login');
 Route::post('register', 'ApiController@register');
-Route::post('newRegister', 'ApiController@newRegisteration');
 
  
 Route::group(['middleware' => 'auth.jwt'], function () {
