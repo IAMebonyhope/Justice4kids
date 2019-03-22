@@ -24,10 +24,24 @@ class ApiController extends Controller
 
         if($user != null){
             $roles = unserialize($user->role);
-            $roles = array_push($roles, $request->role);
-            $user->role = serialize(roles);
+            //dd($roles);
 
-            $user->save();
+            if(in_array($request->role, $roles)){
+                return response()->json([
+                    'success' => false,
+                    'message' => "user already exists"
+                ], 500);
+            }
+            else{
+                array_push($roles, $request->role);
+                $user->role = serialize($roles);
+                $user->save();
+
+                return response()->json([
+                    'success' => true,
+                    'data' => $user
+                ], 200);
+            }
         }
         else{
             $validator = Validator::make($request->all(), [
@@ -46,14 +60,17 @@ class ApiController extends Controller
                 return response()->json([
                     'success' => false,
                     'data' => $validator->errors()
-                ], 200);
+                ], 500);
             }
+
+            $roles = [];
+            array_push($roles, $request->role);
 
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
-            $user->role = $request->role;
+            $user->role = serialize($roles);
             $user->email = $request->email;
             $user->phoneNumber = $request->phoneNumber;
             $user->address = serialize($request->address);
