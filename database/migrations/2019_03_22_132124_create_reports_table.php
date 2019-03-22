@@ -22,12 +22,12 @@ class CreateReportsTable extends Migration
             $table->string('country');
             $table->string('tags');
             $table->string('personInvolvedIDs');
-            $table->string('status');
-            $table->string('advocateID');
-            $table->string('watcherIDs');
-            $table->string('activityIDs');
-            $table->string('imageID');
-            $table->string('fileIDs');
+            $table->string('status')->nullable();
+            $table->string('advocateID')->nullable();
+            $table->string('watcherIDs')->nullable();
+            $table->string('activityIDs')->nullable();
+            $table->string('imageID')->nullable();
+            $table->string('fileIDs')->nullable();
             $table->timestamps();
         });
     }

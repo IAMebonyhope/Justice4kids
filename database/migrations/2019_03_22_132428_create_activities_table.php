@@ -16,7 +16,6 @@ class CreateActivitiesTable extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('description');
-            $table->string('time');
             $table->string('postedBy');
             $table->timestamps();
         });

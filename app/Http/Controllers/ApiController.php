@@ -109,36 +109,54 @@ class ApiController extends Controller
             'token' => $jwt_token,
         ]);
     }
- 
-    public function logout(Request $request)
-    {
-        $this->validate($request, [
-            'token' => 'required'
+
+    public function createReport(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'address' => 'json',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:6|max:10|confirmed',
+            'role' => 'required|string',
+            'phoneNumber' => 'string',
+            
+            'about' => 'string',
+            'additionalFields' => 'string',
+            'credentials' => 'file|array',
         ]);
- 
-        try {
-            JWTAuth::invalidate($request->token);
- 
-            return response()->json([
-                'success' => true,
-                'message' => 'User logged out successfully'
-            ]);
-        } catch (JWTException $exception) {
+
+        if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, the user cannot be logged out'
+                'data' => $validator->errors()
             ], 500);
         }
+
+        $roles = [];
+        array_push($roles, $request->role);
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->role = serialize($roles);
+        $user->email = $request->email;
+        $user->phoneNumber = $request->phoneNumber;
+        $user->address = serialize($request->address);
+        $user->about = $request->about;
+        $user->additionalUrls = $request->additionalFields;
+
+        $user->save();
+
+        if ($this->loginAfterSignUp) {
+            return $this->login($request);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $user
+        ], 200);
     }
  
-    public function getAuthUser(Request $request)
-    {
-        $this->validate($request, [
-            'token' => 'required'
-        ]);
- 
-        $user = JWTAuth::authenticate($request->token);
- 
-        return response()->json(['user' => $user]);
-    }
 }

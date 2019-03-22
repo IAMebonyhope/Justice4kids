@@ -17,8 +17,8 @@ class CreatePersonsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('age');
-            $table->string('address');
+            $table->string('age')->nullable();
+            $table->string('address')->nullable();
             $table->string('phoneNumber');
             $table->string('type');
             $table->timestamps();
