@@ -115,7 +115,9 @@ class ApiController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'description' => 'required|string',
-            'address' => 'json',
+            'address' => 'required|json',
+            'tags' => 'required|array',
+            'persons' => 'required|array',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6|max:10|confirmed',
             'role' => 'required|string',
