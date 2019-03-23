@@ -16,7 +16,10 @@ class PreflightResponse
     public function handle($request, Closure $next )
     {
         if ($request->getMethod() === "OPTIONS") {
-            return response('');
+            return response()->json([
+                'success' => true,
+                'data' => "successful"
+            ], 204);
         }
 return $next($request);
      }
