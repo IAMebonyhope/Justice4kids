@@ -127,7 +127,6 @@ class ApiController extends Controller
             ], 500);
         }
 
-        
 
         $roles = [];
         array_push($roles, $request->role);

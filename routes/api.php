@@ -12,12 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-if ($request->isMethod('options')) {
-    return response()->json([
-        'success' => true,
-        'message' => 'method is option'
-    ], 204);
-}
+
 //create report
 Route::post('reports/create', 'ApiController@createReport');
 
