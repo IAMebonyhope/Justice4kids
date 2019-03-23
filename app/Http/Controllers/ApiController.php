@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RegisterAuthRequest;
 use App\User;
 use App\Person;
+use App\Report;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -79,6 +80,7 @@ class ApiController extends Controller
             $user->additionalUrls = $request->additionalFields;
 
             if($user->save()){
+                $user->role = unserialize($user->role);
                 return response()->json([
                     'success' => true,
                     'data' => $user
@@ -115,7 +117,9 @@ class ApiController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'description' => 'required|string',
-            'address' => 'required|json',
+            'address' => 'required|string',
+            'state' => 'required|string',
+            'country' => 'required|string',
             'tags' => 'required|array',
             'persons' => 'required|array',           
         ]);
@@ -127,36 +131,38 @@ class ApiController extends Controller
             ], 500);
         }
 
+        $personIDs = [];
+
         foreach ($request->persons as $person) {
             if($person != null){
+                $newPerson = new Person();
 
-            }
-            $newPerson = new Person();
+                $newPerson->name = $person->name;
+                $newPerson->email = $person->email;
+                $newPerson->phoneNumber = $person->phoneNumber;
+                $newPerson->address = $person->address;
+                $newPerson->type = $person->type;
+                if($person->age != null){
+                    $newPerson->address = $person->address;
+                }
 
-            //$newPerson
-            //$newPerson->name = $person->email;
+                $newPerson->save();
+
+                array_push($personIDs, $newPerson->id);
+            }    
         }
 
-        $roles = [];
-        array_push($roles, $request->role);
-
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->role = serialize($roles);
-        $user->email = $request->email;
-        $user->phoneNumber = $request->phoneNumber;
-        $user->address = serialize($request->address);
-        $user->about = $request->about;
-        $user->additionalUrls = $request->additionalFields;
-
+        $report = new Report();
+        $report->title = $report->title;
+        $user->description = $request->description;
+        $user->address = $request->address;
+        $user->state = $request->state;
+        $user->country = $request->country;
+        $user->tags = serialize($request->tags);
+        $user->personInvolvedIDs = serialize($personIDs);
         $user->save();
 
-        if ($this->loginAfterSignUp) {
-            return $this->login($request);
-        }
-
+    
         return response()->json([
             'success' => true,
             'data' => $user
