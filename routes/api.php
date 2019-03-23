@@ -32,7 +32,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('reports/{id}', 'ReportController@updateReport');
 
     //role = advocate
-    Route::get('reports/all', 'ReportController@getAllReports');
+    Route::get('reports', 'ReportController@getAllReports');
     Route::get('reports/{country}/{state}', 'ReportController@getReportsByLocation');    
     Route::post('report/accept', 'ReportController@acceptReport');
     Route::post('report/drop', 'ReportController@dropReport');

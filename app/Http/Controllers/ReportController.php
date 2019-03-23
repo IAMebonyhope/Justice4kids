@@ -85,7 +85,26 @@ class ReportController extends Controller
 
     }
 
-    public function acceptReport(){
+    public function acceptReport(Request $request){
 
+        $roles = unserialize($this->user->role);
+
+        if(in_array("advocate", $roles)){
+            return response()->json([
+                'success' => false,
+                'message' => "No enough permission to perform this operation"
+            ], 500);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'reportID' => 'required|int',   
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'data' => $validator->errors()
+            ], 500);
+        }
     }
 }
