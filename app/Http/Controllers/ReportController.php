@@ -53,14 +53,14 @@ class ReportController extends Controller
     }
 
     public function getAllReports(){
-        $roles = unserialize($this->user->role);
+        /*$roles = unserialize($this->user->role);
 
         if(in_array("advocate", $roles) == false){
             return response()->json([
                 'success' => false,
                 'message' => "No enough permission to perform this operation"
             ], 500);
-        }
+        }*/
 
         $reports = Report::all()->toArray();
 
