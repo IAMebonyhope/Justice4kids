@@ -52,7 +52,7 @@ class ReportController extends Controller
 
     }
 
-    public function getAllReport(){
+    public function getAllReports(){
         $roles = unserialize($this->user->role);
 
         if(in_array("advocate", $roles)){
@@ -97,13 +97,37 @@ class ReportController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'reportID' => 'required|int',   
+            'reportID' => 'required|string',   
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'data' => $validator->errors()
+            ], 500);
+        }
+
+        $report = new Report();
+        $report->title = $request->title;
+        $report->description = $request->description;
+        $report->address = $request->address;
+        $report->state = $request->state;
+        $report->country = $request->country;
+        $report->status = "Pending";
+        $report->tags = serialize(json_decode($request->tags));
+        $report->personInvolvedIDs = serialize($personIDs);
+        
+        
+        if($report->save()){
+            return response()->json([
+                'success' => true,
+                'data' => $report
+            ], 200);
+        }
+        else{
+            return response()->json([
+                'success' => false,
+                'message' => "error creating report"
             ], 500);
         }
     }
