@@ -120,8 +120,8 @@ class ApiController extends Controller
             'address' => 'required|string',
             'state' => 'required|string',
             'country' => 'required|string',
-            'tags' => 'required|array',
-            'persons' => 'required|array',           
+            'tags' => 'required|string',
+            'persons' => 'required|string',           
         ]);
 
         if ($validator->fails()) {
@@ -133,13 +133,13 @@ class ApiController extends Controller
 
         $personIDs = [];
 
-        foreach ($request->persons as $person) {
+        foreach (json_decode($request->persons) as $person) {
             if($person != null){
                 $newPerson = new Person();
 
                 $newPerson->name = $person->name;
                 $newPerson->email = $person->email;
-                $newPerson->phoneNumber = $person->phoneNumber;
+                $newPerson->phoneNumber = $person->phone;
                 $newPerson->address = $person->address;
                 $newPerson->type = $person->type;
                 if($person->age != null){
@@ -158,7 +158,7 @@ class ApiController extends Controller
         $report->address = $request->address;
         $report->state = $request->state;
         $report->country = $request->country;
-        $report->tags = serialize($request->tags);
+        $report->tags = serialize(json_decode($request->tags));
         $report->personInvolvedIDs = serialize($personIDs);
         $report->save();
 
