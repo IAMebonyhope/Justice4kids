@@ -172,9 +172,7 @@ class ApiController extends Controller
                 'message' => "error creating report"
             ], 500);
         }
-
-    
-       
+  
     }
  
 }
