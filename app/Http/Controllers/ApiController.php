@@ -77,16 +77,15 @@ class ApiController extends Controller
             $user->about = $request->about;
             $user->additionalUrls = $request->additionalFields;
 
-            $user->save();
-    
-            if ($this->loginAfterSignUp) {
-                return $this->login($request);
+            if($user->save()){
+                return response()->json([
+                    'success' => true,
+                    'data' => $user
+                ], 200);
+
             }
     
-            return response()->json([
-                'success' => true,
-                'data' => $user
-            ], 200);
+            
         }
 
     }
@@ -127,7 +126,7 @@ class ApiController extends Controller
             ], 500);
         }
 
-        
+
 
         $roles = [];
         array_push($roles, $request->role);
