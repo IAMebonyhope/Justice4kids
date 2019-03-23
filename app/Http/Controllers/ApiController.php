@@ -142,10 +142,7 @@ class ApiController extends Controller
                 $newPerson->phoneNumber = $person->phone;
                 $newPerson->address = $person->address;
                 $newPerson->type = $person->type;
-                if($person->age != null){
-                    $newPerson->address = $person->address;
-                }
-
+            
                 $newPerson->save();
 
                 array_push($personIDs, $newPerson->id);
@@ -153,11 +150,12 @@ class ApiController extends Controller
         }
 
         $report = new Report();
-        $report->title = $report->title;
+        $report->title = $request->title;
         $report->description = $request->description;
         $report->address = $request->address;
         $report->state = $request->state;
         $report->country = $request->country;
+        $report->status = "Pending";
         $report->tags = serialize(json_decode($request->tags));
         $report->personInvolvedIDs = serialize($personIDs);
         $report->save();

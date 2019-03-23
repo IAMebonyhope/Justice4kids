@@ -34,11 +34,11 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     //role = advocate
     Route::get('reports', 'ReportController@getAllReports');
     Route::get('reports/{country}/{state}', 'ReportController@getReportsByLocation');    
-    Route::post('report/accept', 'UserController@acceptReport');
-    Route::post('report/drop', 'UserController@dropReport');
-    Route::post('report/takeOver', 'UserController@reportRequestTakeOver');
-    Route::post('report/handOver', 'UserController@reportHandOver');
-    Route::get('reports/active', 'UserController@activeReports');
+    Route::post('report/accept', 'ReportController@acceptReport');
+    Route::post('report/drop', 'ReportController@dropReport');
+    Route::post('report/takeOver', 'ReportController@reportRequestTakeOver');
+    Route::post('report/handOver', 'ReportController@reportHandOver');
+    Route::get('reports/active', 'ReportController@activeReports');
 
     //role = advocate
     Route::post('activities/create', 'ActivityController@create');
