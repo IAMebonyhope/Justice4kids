@@ -128,9 +128,13 @@ class ApiController extends Controller
         }
 
         foreach ($request->persons as $person) {
-            $perso = new Person();
+            if($person != null){
 
-            $perso->name = $person->email;
+            }
+            $newPerson = new Person();
+
+            //$newPerson
+            //$newPerson->name = $person->email;
         }
 
         $roles = [];
