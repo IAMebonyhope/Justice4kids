@@ -154,13 +154,13 @@ class ApiController extends Controller
 
         $report = new Report();
         $report->title = $report->title;
-        $user->description = $request->description;
-        $user->address = $request->address;
-        $user->state = $request->state;
-        $user->country = $request->country;
-        $user->tags = serialize($request->tags);
-        $user->personInvolvedIDs = serialize($personIDs);
-        $user->save();
+        $report->description = $request->description;
+        $report->address = $request->address;
+        $report->state = $request->state;
+        $report->country = $request->country;
+        $report->tags = serialize($request->tags);
+        $report->personInvolvedIDs = serialize($personIDs);
+        $report->save();
 
     
         return response()->json([
