@@ -15,6 +15,7 @@ class PreflightResponse
     */
     public function handle($request, Closure $next )
     {
+        
         if ($request->getMethod() === "OPTIONS") {
             return response()->json([
                 'success' => true,
