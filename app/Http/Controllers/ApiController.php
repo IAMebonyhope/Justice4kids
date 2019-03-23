@@ -158,13 +158,23 @@ class ApiController extends Controller
         $report->status = "Pending";
         $report->tags = serialize(json_decode($request->tags));
         $report->personInvolvedIDs = serialize($personIDs);
-        $report->save();
+        
+        
+        if($report->save()){
+            return response()->json([
+                'success' => true,
+                'data' => $report
+            ], 200);
+        }
+        else{
+            return response()->json([
+                'success' => false,
+                'message' => "error creating report"
+            ], 500);
+        }
 
     
-        return response()->json([
-            'success' => true,
-            'data' => $user
-        ], 200);
+       
     }
  
 }

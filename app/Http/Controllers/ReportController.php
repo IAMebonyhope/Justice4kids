@@ -38,7 +38,7 @@ class ReportController extends Controller
             $report->tags = unserialize($report->tags);
             $report->watcherIDs = unserialize($report->watcherIDs);
             return response()->json([
-                'success' => false,
+                'success' => true,
                 'data' => $report
             ], 200);
         }          
@@ -53,9 +53,36 @@ class ReportController extends Controller
     }
 
     public function getAllReport(){
-        if($this->user->role !== "superadmin"){
-            return response()->json(['error' => true, 'msg' => "No enough permission to perform this operation"]);
+        $roles = unserialize($this->user->role);
+
+        if(in_array("advocate", $roles)){
+            return response()->json([
+                'success' => false,
+                'message' => "No enough permission to perform this operation"
+            ], 500);
         }
+
+        $reports = Report::all()->toArray();
+
+        if ($reports != null){
+
+            foreach($reports as $report){
+                $report->tags = unserialize($report->tags);
+                $report->watcherIDs = unserialize($report->watcherIDs);
+            }
+            
+            return response()->json([
+                'success' => true,
+                'data' => $reports
+            ], 200);
+        }          
+        else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Reports not found',
+            ], 401);
+        }
+
     }
 
     public function acceptReport(){
