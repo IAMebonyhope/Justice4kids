@@ -12,12 +12,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::options('{any}', function () {
-    return response('OK', \Illuminate\Http\Response::HTTP_NO_CONTENT)
-          ->header('Access-Control-Allow-Origin', implode(',', config('cors.default_profile.allow_origins')))
-          ->header('Access-Control-Allow-Methods', implode(',', config('cors.default_profile.allow_methods')))
-          ->header('Access-Control-Allow-Headers', implode(',', config('cors.default_profile.allow_headers')));
-});
 
 //create report
 Route::post('reports/create', 'ApiController@createReport');

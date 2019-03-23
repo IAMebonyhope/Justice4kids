@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterAuthRequest;
 use App\User;
+use App\Person;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -49,11 +50,11 @@ class ApiController extends Controller
                 'email' => 'required|email|unique:users',
                 'password' => 'required|string|min:6|max:10|confirmed',
                 'role' => 'required|string',
-                'phoneNumber' => 'string',
-                'address' => 'json',
-                'about' => 'string',
-                'additionalFields' => 'string',
-                'credentials' => 'file|array',
+                'phoneNumber' => '',
+                'address' => '',
+                'about' => '',
+                'additionalFields' => '',
+                'credentials' => '',
             ]);
 
             if ($validator->fails()) {
@@ -126,7 +127,11 @@ class ApiController extends Controller
             ], 500);
         }
 
+        foreach ($request->persons as $person) {
+            $perso = new Person();
 
+            $perso->name = $person->email;
+        }
 
         $roles = [];
         array_push($roles, $request->role);
