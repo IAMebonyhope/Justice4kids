@@ -117,15 +117,7 @@ class ApiController extends Controller
             'description' => 'required|string',
             'address' => 'required|json',
             'tags' => 'required|array',
-            'persons' => 'required|array',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|max:10|confirmed',
-            'role' => 'required|string',
-            'phoneNumber' => 'string',
-            
-            'about' => 'string',
-            'additionalFields' => 'string',
-            'credentials' => 'file|array',
+            'persons' => 'required|array',           
         ]);
 
         if ($validator->fails()) {
@@ -134,6 +126,8 @@ class ApiController extends Controller
                 'data' => $validator->errors()
             ], 500);
         }
+
+        
 
         $roles = [];
         array_push($roles, $request->role);
