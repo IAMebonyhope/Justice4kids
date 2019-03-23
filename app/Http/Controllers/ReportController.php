@@ -11,9 +11,21 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 class ReportController extends Controller
 {
     protected $user;
-    
+
     public function __construct()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
+    }
+
+    public function getReport(){
+
+    }
+
+    public function getAllReport(){
+
+    }
+
+    public function acceptReport(){
+        
     }
 }
