@@ -66,10 +66,10 @@ class ReportController extends Controller
 
         if ($reports != null){
 
-            foreach($reports as $report){
+            /*foreach($reports as $report){
                 $report->tags = unserialize($report->tags);
                 $report->watcherIDs = unserialize($report->watcherIDs);
-            }
+            }*/
             
             return response()->json([
                 'success' => true,
