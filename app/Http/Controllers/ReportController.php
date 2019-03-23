@@ -22,7 +22,7 @@ class ReportController extends Controller
 
         $roles = unserialize($this->user->role);
 
-        if(in_array("advocate", $roles)){
+        if(in_array("advocate", $roles) == false){
             return response()->json([
                 'success' => false,
                 'message' => "No enough permission to perform this operation"
